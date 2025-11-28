@@ -51,6 +51,8 @@ def convert(rc: dict, metadata_only: bool = False) -> dict:
     :return: Dictionary containing DataCite metadata
     """
 
+    rc = merge_authors_and_creators(rc)
+
     m = load_mapping_json()
 
     dc = setup_dc()
@@ -87,7 +89,7 @@ def convert(rc: dict, metadata_only: bool = False) -> dict:
             print(f"\t|- Applying mapping {mapping_key}")
 
             mapping = mappings.get(mapping_key)
-            dc, any_present = apply_mapping(mapping, mapping_paths, rc, dc)
+            dc, any_present = apply_mapping(mapping, mapping_paths, rc, dc, mapping_key)
             is_any_present = is_any_present or any_present
 
         if not is_any_present:
@@ -135,7 +137,7 @@ def get_mapping_paths(rc: dict, mappings: dict) -> dict:
     return mapping_paths
 
 
-def apply_mapping(mapping, mapping_paths, rc, dc):  # noqa: C901
+def apply_mapping(mapping, mapping_paths, rc, dc, mapping_key):  # noqa: C901
     """Convert RO-Crate metadata to DataCite according to the specified mapping and
     paths.
 
@@ -152,6 +154,7 @@ def apply_mapping(mapping, mapping_paths, rc, dc):  # noqa: C901
     :param mapping_paths: A list of paths, used to disambiguate array values
     :param rc: Dictionary of RO-Crate metadata
     :param dc: Dictionary of DataCite metadata
+    :param mapping_key: The key of the mapping being applied
     :return: tuple containing the updated dictionary of DataCite metadata, and a boolean
         indicating whether the rule was applied
     """
@@ -179,8 +182,15 @@ def apply_mapping(mapping, mapping_paths, rc, dc):  # noqa: C901
         paths = mapping_paths.get(processed_string)
         print(f"\t\t|- Paths: {paths}")
 
-    for path in paths:
-        print(f"PATH: {path}")
+    for i, path in enumerate(paths):
+        if mapping_key.startswith("publisher_mapping") and i > 0:
+            # RO-Crate can have a list of publishers, but DataCite only supports one
+            # publisher. So, we only apply the first one.
+            print(
+                f"\t\t|- Skipping path {i} for mapping {mapping_key} to avoid "
+                "overwriting previous values."
+            )
+            continue
         new_path = path.copy()
         from_value = get_value_from_rc(rc.copy(), from_mapping_value, new_path)
 
@@ -189,12 +199,12 @@ def apply_mapping(mapping, mapping_paths, rc, dc):  # noqa: C901
             # must be implemented on how to handle it)
             print(
                 "\t\t|- Result is a JSON object, so this rule cannot be applied. "
-                "Skipping to next rule."
+                "Skipping to next path."
             )
             from_value = None
 
-        # if (from_value is None):
-        #    continue
+        if from_value is None:
+            continue
 
         if only_if_value is not None:
             print(f"\t\t|- Checking condition {only_if_value}")
@@ -213,8 +223,8 @@ def apply_mapping(mapping, mapping_paths, rc, dc):  # noqa: C901
                 f"{path.copy()}"
             )
             rule_applied = True
-            print(dc, to_mapping_value, from_value)
             dc = set_dc(dc, to_mapping_value, from_value, path.copy())
+            print(dc)
 
     return dc, rule_applied
 
@@ -363,8 +373,11 @@ def set_dc(dictionary, key, value=None, path=[]):
             path = path[1:]
             last_val = current_dict[key_part[:-2]]
 
-            if len(current_dict[key_part[:-2]]) <= index:
-                current_dict[key_part[:-2]].append({})
+            while len(current_dict[key_part[:-2]]) <= index:
+                current_dict[key_part[:-2]].append(
+                    {}
+                )  # It expands 1 by 1 anyway, since no empty paths can remain after
+                # a mapping rule is applied
 
             current_dict = current_dict[key_part[:-2]][index]
 
@@ -423,6 +436,32 @@ def process(process_rule, value):
     except AttributeError:
         raise NotImplementedError(f"Function {process_rule} not implemented.")
     return function(value)
+
+
+def merge_authors_and_creators(rc: dict):
+    """
+    Copy creators to authors in the RO-Crate, so they can be processed in a single
+    mapping. Mapping from 'author' to 'creators' and later from 'creator' to
+    'creators' causes overwritings.
+    """
+
+    for rde in rc["@graph"]:
+        if "creator" in rde:
+            for person_or_org in rde["creator"]:
+                if isinstance(person_or_org, str):
+                    added_authors = [item for item in rde["author"]]
+                    if person_or_org not in added_authors:
+                        rde["author"].append(person_or_org)
+                    continue
+                urls_orcid = [
+                    item["@id"]
+                    for item in rde["author"]
+                    if isinstance(item, dict) and "@id" in item
+                ]
+                if person_or_org["@id"] not in urls_orcid:
+                    rde["author"].append(person_or_org)
+
+    return rc
 
 
 if __name__ == "__main__":

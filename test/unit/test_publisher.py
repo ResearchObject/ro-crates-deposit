@@ -42,7 +42,7 @@ def test_publisher_string(rc, dc):
     paths = get_mapping_paths(rc, {rule_name: rule})
 
     # Act
-    dc, _ = apply_mapping(rule, paths, rc, dc)
+    dc, _ = apply_mapping(rule, paths, rc, dc, rule_name)
 
     # Assert
     assert dc["metadata"]["publisher"] == publisher_string
@@ -57,7 +57,7 @@ def test_publisher_entity(rc, dc):
     paths = get_mapping_paths(rc, {rule_name: rule})
 
     # Act
-    dc, _ = apply_mapping(rule, paths, rc, dc)
+    dc, _ = apply_mapping(rule, paths, rc, dc, rule_name)
 
     # Assert
     assert dc["metadata"]["publisher"] == publisher_entity["name"]

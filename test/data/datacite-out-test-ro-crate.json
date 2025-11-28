@@ -13,10 +13,9 @@
         "creators": [
             {
                 "person_or_org": {
-                    "type": "personal",
                     "given_name": "Philipp",
                     "family_name": "Beer",
-                    "name": "Beer",
+                    "type": "personal",
                     "identifiers": [
                         {
                             "scheme": "orcid",
@@ -26,16 +25,17 @@
                 },
                 "affiliations": [
                     {
-                        "name": "TU Wien"
+                        "name": "TU Wien",
+                        "scheme": "ror",
+                        "id": "04d836q62"
                     }
                 ]
             },
             {
                 "person_or_org": {
-                    "type": "personal",
                     "given_name": "Milan",
                     "family_name": "Szente",
-                    "name": "Szente",
+                    "type": "personal",
                     "identifiers": [
                         {
                             "scheme": "orcid",
@@ -45,51 +45,9 @@
                 },
                 "affiliations": [
                     {
-                        "name": "TU Wien"
-                    }
-                ]
-            }
-        ],
-        "contributors": [
-            {
-                "person_or_org": {
-                    "type": "personal",
-                    "given_name": "Philipp",
-                    "family_name": "Beer",
-                    "identifiers": [
-                        {
-                            "scheme": "orcid",
-                            "identifier": "0009-0009-6923-0027"
-                        }
-                    ]
-                },
-                "role": {
-                    "id": "editor"
-                },
-                "affiliations": [
-                    {
-                        "name": "TU Wien"
-                    }
-                ]
-            },
-            {
-                "person_or_org": {
-                    "type": "personal",
-                    "given_name": "Milan",
-                    "family_name": "Szente",
-                    "identifiers": [
-                        {
-                            "scheme": "orcid",
-                            "identifier": "0009-0001-3915-5910"
-                        }
-                    ]
-                },
-                "role": {
-                    "id": "editor"
-                },
-                "affiliations": [
-                    {
-                        "name": "TU Wien"
+                        "name": "TU Wien",
+                        "scheme": "ror",
+                        "id": "04d836q62"
                     }
                 ]
             }

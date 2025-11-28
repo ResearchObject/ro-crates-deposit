@@ -22,10 +22,13 @@
             {
                 "person_or_org": {
                     "type": "organizational",
-                    "name": "http://rohub.org/users/portal/cbf3036d06193013875d7bd3b9956c89"
-                },
-                "role": {
-                    "id": "editor"
+                    "name": "http://everest.psnc.pl/users/generation_service/"
+                }
+            },
+            {
+                "person_or_org": {
+                    "type": "organizational",
+                    "name": "https://w3id.org/ro-id/users/service-account-enrichment"
                 }
             }
         ],

@@ -170,3 +170,23 @@ def test_string__none():
     input = None
 
     assert not cf.string(input)
+
+
+def test_ror__true():
+    input = "https://ror.org/05sd8tv96"
+    assert cf.ror(input)
+
+
+def test_ror__false():
+    input = "05sd8tv96"
+    assert not cf.ror(input)
+
+
+def test_ror__empty():
+    input = ""
+    assert not cf.ror(input)
+
+
+def test_ror__none():
+    input = None
+    assert not cf.ror(input)

@@ -49,3 +49,7 @@ def embargoed(value):
 
 def string(value):
     return value and isinstance(value, str)
+
+
+def ror(value):
+    return value and value.startswith("https://ror.org/")

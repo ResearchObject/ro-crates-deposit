@@ -92,7 +92,7 @@ def get_value_from_rc(rc, from_key, path=[]):
 
     print(f"\t\t|- Retrieving value {from_key} with path {path} from RO-Crate.")
     keys = from_key.split(".")
-    print(keys)
+    # print(keys)
     current_entity = rc_get_rde(rc)
 
     for key in keys:

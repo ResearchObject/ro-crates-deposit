@@ -1,4 +1,5 @@
 import json
+import copy
 from importlib import resources
 import rocrate_inveniordm.mapping as mapping
 
@@ -99,18 +100,21 @@ def format_value(format, value):
     :param value: The value to insert.
     :return: The formatted value.
     """
-    if isinstance(format, str):
-        return format.replace("@@this", value)
-    elif isinstance(format, dict):
-        # format = {}
-        for key, v in format.items():
-            format[key] = format_value(v, value)
-        return format
-    elif isinstance(format, bool):
-        return format
+
+    # If not copied, generates a bug when arrays are used at "from" in the mapping
+    new_value = copy.deepcopy(format)
+
+    if isinstance(new_value, str):
+        return new_value.replace("@@this", value)
+    elif isinstance(new_value, dict):
+        for key, v in new_value.items():
+            new_value[key] = format_value(v, value)
+        return new_value
+    elif isinstance(new_value, bool):
+        return new_value
     else:
         raise TypeError(
-            f"Format must be a string, dictionary, or bool, but is {type(format)}."
+            f"Format must be a string, dictionary, or bool, but is {type(new_value)}."
         )
 
 
