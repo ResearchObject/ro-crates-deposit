@@ -15,8 +15,12 @@ authors:
   - given-names: Eli
     family-names: Chadwick
     affiliation: University of Manchester
-    orcid: 'https://orcid.org/0000-0002-0035-6475'
-repository-code: 'https://github.com/ResearchObject/ro-crate-inveniordm'
+    orcid: "https://orcid.org/0000-0002-0035-6475"
+  - given-names: Raül
+    family-names: Sirvent
+    affiliation: Barcelona Supercomputing Center
+    orcid: "https://orcid.org/0000-0003-0606-2512"
+repository-code: "https://github.com/ResearchObject/ro-crate-inveniordm"
 abstract: >-
   A Python package and command line tool to deposit an
   RO-Crate to an InvenioRDM repository.
@@ -24,6 +28,7 @@ keywords:
   - RO-Crate
   - rocrate
   - InvenioRDM
+  - Zenodo
 license: MIT
-version: v2.0.3
-date-released: '2024-08-23'
+version: v2.1.0
+date-released: "2025-12-03"

@@ -49,11 +49,13 @@ pytest
 
 ## Publish a release
 
-1. Update the version in `pyproject.toml`
-2. Make a git tag for the release and push it to GitHub
-3. Run `poetry build`
-4. Run `poetry publish -u <username> -p <password_or_api_key>`
-5. Create a release on GitHub, including the build artifacts
+1. Update the version in `pyproject.toml` 
+1. Update the version and publication date in `CITATION.cff`
+1. Add new contributors as authors to the files above
+1. Make a git tag for the release and push it to GitHub
+1. Run `poetry build`
+1. Run `poetry publish -u <username> -p <password_or_api_key>`
+1. Create a release on GitHub, including the build artifacts
 
 ## Project structure
 
